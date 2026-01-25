@@ -9,9 +9,6 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,11 +20,21 @@ jobs:
           java-version: "17"
           cache: "gradle"
 
-      - name: Grant execute permission for gradlew
+      - name: Show repo layout (debug)
+        run: |
+          pwd
+          ls -la
+          ls -la app || true
+          find .github -maxdepth 3 -type f -print || true
+
+      - name: Ensure gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew clean :app:assembleDebug --stacktrace
+      - name: Gradle info (debug)
+        run: ./gradlew --version
+
+      - name: Build Debug APK (verbose)
+        run: ./gradlew :app:assembleDebug --stacktrace --info --no-daemon
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
