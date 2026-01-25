@@ -1,3 +1,5 @@
+- name: Dependency insight (who pulls com.android.support)
+  run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
 # File: .github/workflows/android-debug-apk.yml
 name: Build Android Debug APK
 
