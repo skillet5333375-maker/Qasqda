@@ -1,3 +1,4 @@
+@file:OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 package com.example.medalgorithms.ui.screens
 
 import androidx.compose.material3.*
