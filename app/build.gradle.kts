@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.compose.material:material-icons-extended")
 
     // Compose
 implementation("androidx.compose.material:material")
