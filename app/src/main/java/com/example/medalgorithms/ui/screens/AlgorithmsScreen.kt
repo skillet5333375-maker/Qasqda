@@ -1,3 +1,4 @@
+// File: app/src/main/java/com/example/medalgorithms/ui/screens/AlgorithmsScreen.kt
 package com.example.medalgorithms.ui.screens
 
 import android.annotation.SuppressLint
@@ -9,6 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.medalgorithms.ALGORITHMS_PDF_ASSET
@@ -27,7 +32,6 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
     var hits by remember { mutableStateOf<List<PdfHit>>(emptyList()) }
     var searching by remember { mutableStateOf(false) }
     var jumpToPage by remember { mutableStateOf<Int?>(null) }
-
     var pdfViewRef by remember { mutableStateOf<PDFView?>(null) }
 
     Scaffold(
@@ -57,7 +61,11 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                         hits = emptyList()
                         scope.launch {
                             try {
-                                hits = searchInPdfAssets(context, ALGORITHMS_PDF_ASSET, query)
+                                hits = searchInPdfAssets(
+                                    context = context,
+                                    assetName = ALGORITHMS_PDF_ASSET,
+                                    query = query,
+                                )
                             } finally {
                                 searching = false
                             }
@@ -75,7 +83,7 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
 
             if (hits.isNotEmpty()) {
                 Text(
-                    text = "Найдено: ${hits.size}",
+                    text = "Найдено совпадений: ${hits.size}",
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 )
@@ -83,7 +91,7 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 200.dp)
+                        .heightIn(max = 220.dp)
                         .padding(horizontal = 12.dp)
                 ) {
                     items(hits) { hit ->
@@ -93,14 +101,31 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                                 .padding(vertical = 6.dp)
                                 .clickable {
                                     jumpToPage = hit.pageIndex
-                                    // if pdf already loaded, jump immediately
                                     pdfViewRef?.jumpTo(hit.pageIndex, true)
                                 }
                         ) {
                             Column(Modifier.padding(12.dp)) {
-                                Text("Страница: ${hit.pageIndex + 1}", style = MaterialTheme.typography.labelMedium)
+                                Text(
+                                    text = "Страница: ${hit.pageIndex + 1}",
+                                    style = MaterialTheme.typography.labelMedium
+                                )
                                 Spacer(Modifier.height(6.dp))
-                                Text(hit.snippet)
+
+                                val s = hit.snippet
+                                val hs = hit.highlightStart.coerceIn(0, s.length)
+                                val he = (hs + hit.highlightLength).coerceIn(hs, s.length)
+
+                                Text(
+                                    text = buildAnnotatedString {
+                                        append(s.substring(0, hs))
+                                        if (he > hs) {
+                                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                                append(s.substring(hs, he))
+                                            }
+                                        }
+                                        append(s.substring(he))
+                                    }
+                                )
                             }
                         }
                     }
@@ -109,7 +134,6 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                 Spacer(Modifier.height(8.dp))
             }
 
-            // PDF viewer
             AndroidView(
                 factory = { ctx ->
                     PDFView(ctx, null).apply {
@@ -120,7 +144,6 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                             .defaultPage(0)
                             .onLoad {
                                 pdfViewRef = this
-                                // apply pending jump
                                 jumpToPage?.let { this.jumpTo(it, true) }
                             }
                             .load()
@@ -128,7 +151,6 @@ fun AlgorithmsScreen(onBack: () -> Unit) {
                 },
                 modifier = Modifier.fillMaxSize(),
                 update = { view ->
-                    // keep reference
                     pdfViewRef = view
                     jumpToPage?.let { view.jumpTo(it, true) }
                 }
