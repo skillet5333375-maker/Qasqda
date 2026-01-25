@@ -1,4 +1,3 @@
-# File: .github/workflows/android-debug-apk.yml
 name: Build Android Debug APK
 
 on:
@@ -42,5 +41,32 @@ jobs:
         if: always()
         shell: bash
         run: |
-          echo "==== FAILURE SNIPPET (if any) ===="
-          grep -nE "FAILURE:|\\* What went wrong:|Execution failed for task|Caused by:" gradle-build.log | head -n 2*
+          if [ -f gradle-build.log ]; then
+            echo "==== FAILURE SNIPPET (if any) ===="
+            grep -nE "FAILURE:|\\* What went wrong:|Execution failed for task|Caused by:" gradle-build.log | head -n 200 || true
+            echo "==== LAST 200 LINES ===="
+            tail -n 200 gradle-build.log || true
+          else
+            echo "gradle-build.log not found (build likely failed before tee)."
+          fi
+
+      - name: Upload logs and reports (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-and-reports
+          path: |
+            gradle-build.log
+            build/reports/problems/**/*
+            app/build/reports/**/*
+            app/build/outputs/logs/manifest-merger-*.txt
+            app/build/intermediates/merged_manifest/**/*
+          if-no-files-found: warn
+
+      - name: Upload Debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error

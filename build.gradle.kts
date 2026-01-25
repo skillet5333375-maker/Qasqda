@@ -1,12 +1,9 @@
+// File: build.gradle.kts (ROOT)
 plugins {
-    id("com.android.application") version "8.13.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    id("org.jetbrains.kotlin.kapt") version "1.9.22" apply false
-dependencies {
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    id("com.android.application") version "8.5.2" apply false
+    id("org.jetbrains.kotlin.android") version "2.0.20" apply false
 }
-// File: app/build.gradle.kts
-configurations.configureEach {
-    exclude(group = "com.android.support")
-}
+
+tasks.register<Delete>("clean") {
+    delete(layout.buildDirectory)
 }

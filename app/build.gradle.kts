@@ -41,6 +41,8 @@ kotlinOptions {
 }
 
 dependencies {
+    // AndroidX replacement for old support-v4 (helps legacy libs)
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     // Compose
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -71,4 +73,11 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+/**
+ * Drop old com.android.support:* artifacts. They frequently break manifest merging in AndroidX projects.
+ */
+configurations.configureEach {
+    exclude(group = "com.android.support")
 }
