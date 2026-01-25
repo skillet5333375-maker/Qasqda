@@ -1,23 +1,9 @@
+// File: app/src/main/java/com/example/medalgorithms/Constants.kt
 package com.example.medalgorithms
 
-const val ALGORITHMS_PDF_ASSET = "algorithms_mossmp_2024.pdf"
+/**
+ * Имя PDF в папке: app/src/main/assets/
+ * Пример: app/src/main/assets/algorithms.pdf
+ */
+const val ALGORITHMS_PDF_ASSET = "algorithms.pdf"
 
-val TEMPLATE_CATEGORIES = listOf(
-    "Анестезиология и реаниматология",
-    "Детская анестезиология и реаниматология",
-    "Кардиология",
-    "Неврология",
-    "Терапия",
-    "Педиатрия и неонатология",
-    "Травматология",
-    "Инфекционные заболевания",
-    "Хирургия",
-    "Акушерство и гинекология",
-    "Урология",
-    "Оториноларингология",
-    "Офтальмология",
-    "Стоматология",
-    "Токсикология",
-    "Токсикология (детская)",
-    "Психиатрия и наркология"
-)
