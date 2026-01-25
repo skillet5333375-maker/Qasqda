@@ -63,7 +63,7 @@ implementation("androidx.compose.material:material")
     kapt("androidx.room:room-compiler:2.6.1")
 
     // PDF Viewer
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.1")
 
     // PDF text extraction for search
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
