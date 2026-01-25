@@ -1,0 +1,18 @@
+// File: app/src/main/java/com/example/medalgorithms/ui/theme/AppTheme.kt
+package com.example.medalgorithms.ui.theme
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.foundation.isSystemInDarkTheme
+
+@Composable
+fun AppTheme(content: @Composable () -> Unit) {
+    val colors = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+    MaterialTheme(
+        colorScheme = colors,
+        typography = Typography,
+        content = content
+    )
+}
