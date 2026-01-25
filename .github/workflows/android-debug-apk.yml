@@ -1,24 +1,18 @@
-# File: .github/workflows/android-debug-apk.yml- name: Who pulls com.android.support
- on:
-  workflow_dispatch:
-  push:
-    branches: [ "main", "master" ]
-  pull_request:
-  run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
-- name: Dependency insight (who pulls com.android.support)
-  run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
 # File: .github/workflows/android-debug-apk.yml
 name: Build Android Debug APK
 
 on:
   workflow_dispatch:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   pull_request:
 
 jobs:
   build-debug:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,12 +20,15 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
+          distribution: temurin
           java-version: "17"
-          cache: "gradle"
+          cache: gradle
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+
+      - name: Dependency insight (who pulls com.android.support)
+        run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
 
       - name: Build Debug APK (capture log)
         shell: bash
@@ -46,31 +43,4 @@ jobs:
         shell: bash
         run: |
           echo "==== FAILURE SNIPPET (if any) ===="
-          grep -nE "FAILURE:|\\* What went wrong:|Execution failed for task|Caused by:" -n gradle-build.log | head -n 200 || true
-          echo "==== LAST 200 LINES ===="
-          tail -n 200 gradle-build.log || true
-path: |
-  gradle-build.log
-  build/reports/problems/**/*
-  app/build/reports/**/*
-  app/build/outputs/logs/manifest-merger-*.txt
-  app/build/intermediates/merged_manifest/**/*
-
-      - name: Upload logs and reports (always)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-logs-and-reports
-          path: |
-            gradle-build.log
-            build/reports/problems/**/*
-            app/build/reports/**/*
-          if-no-files-found: warn
-
-      - name: Upload Debug APK
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
+          grep -nE "FAILURE:|\\* What went wrong:|Execution failed for task|Caused by:" gradle-build.log | head -n 2*
