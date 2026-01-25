@@ -42,10 +42,8 @@ android {
 }
 
 dependencies {
-    // AndroidX replacement for old support-v4 (helps legacy libs)
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
-    // Compose
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui")
@@ -53,9 +51,23 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
-    // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    // Lifecycle / ViewModel
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+configurations.configureEach {
+    exclude(group = "com.android.support")
+}
