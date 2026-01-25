@@ -42,6 +42,7 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Compose
+implementation("androidx.compose.material:material")
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui")
