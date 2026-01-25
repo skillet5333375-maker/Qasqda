@@ -27,6 +27,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Dependency insight (who pulls com.android.support)
+        continue-on-error: true
         run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
 
       - name: Build Debug APK (capture log)
@@ -36,6 +37,23 @@ jobs:
           ./gradlew :app:assembleDebug \
             --no-daemon --stacktrace --info --warning-mode all --console=plain \
             2>&1 | tee gradle-build.log
+
+      - name: Print Kotlin errors (always)
+        if: always()
+        shell: bash
+        run: |
+          if [ -f gradle-build.log ]; then
+            echo "==== Kotlin compiler errors (e: file:///) ===="
+            grep -n "e: file:///" gradle-build.log | head -n 200 || true
+
+            echo "==== Unresolved reference ===="
+            grep -n "Unresolved reference" gradle-build.log | head -n 200 || true
+
+            echo "==== Experimental API errors ===="
+            grep -n "is experimental" gradle-build.log | head -n 200 || true
+          else
+            echo "gradle-build.log not found"
+          fi
 
       - name: Extract failure summary (always)
         if: always()
