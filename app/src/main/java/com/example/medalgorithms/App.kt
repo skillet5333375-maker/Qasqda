@@ -1,15 +1,12 @@
+// File: app/src/main/java/com/example/medalgorithms/App.kt
 package com.example.medalgorithms
 
-import android.app.Application
-import androidx.room.Room
-import com.example.medalgorithms.data.AppDb
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
+import com.example.medalgorithms.ui.AppNavGraph
 
-class App : Application() {
-    lateinit var db: AppDb
-        private set
-
-    override fun onCreate() {
-        super.onCreate()
-        db = Room.databaseBuilder(this, AppDb::class.java, "app.db").build()
-    }
+@Composable
+fun App() {
+    val navController = rememberNavController()
+    AppNavGraph(navController = navController)
 }
