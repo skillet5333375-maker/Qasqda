@@ -2,7 +2,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
- id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -20,7 +20,7 @@ android {
 
     buildFeatures {
         compose = true
- 
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
+    // Compose
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.ui:ui")
@@ -48,16 +49,22 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Lifecycle / ViewModel
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
+    // Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
 
+    // PDF Viewer
     implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+
+    // PDF text extraction for search
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 }
 
