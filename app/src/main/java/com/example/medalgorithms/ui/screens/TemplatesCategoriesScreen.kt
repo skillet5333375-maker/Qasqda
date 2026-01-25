@@ -1,3 +1,7 @@
+// File: app/src/main/java/com/example/medalgorithms/ui/screens/TemplatesCategoriesScreen.kt
+// ВАЖНО: если твой файл сильно отличается — просто применяй правки по сути:
+// 1) импорт TEMPLATE_CATEGORIES
+// 2) category.id как String
 package com.example.medalgorithms.ui.screens
 
 import androidx.compose.foundation.clickable
@@ -9,33 +13,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.medalgorithms.TEMPLATE_CATEGORIES
+import com.example.medalgorithms.TemplateCategory
 
 @Composable
 fun TemplatesCategoriesScreen(
     onBack: () -> Unit,
-    onOpenCategory: (String) -> Unit
+    onOpenCategory: (categoryId: String) -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar("Шаблоны", onBack) }
+        topBar = { TopBar("Категории", onBack) }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(12.dp)
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(TEMPLATE_CATEGORIES) { category ->
+            items(TEMPLATE_CATEGORIES) { category: TemplateCategory ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                        .clickable { onOpenCategory(category) }
+                        .clickable { onOpenCategory(category.id) }
                 ) {
-                    Text(
-                        text = category,
-                        modifier = Modifier.padding(14.dp),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    Column(Modifier.padding(14.dp)) {
+                        Text(category.title, style = MaterialTheme.typography.titleMedium)
+                        Spacer(Modifier.height(4.dp))
+                        Text("ID: ${category.id}", style = MaterialTheme.typography.labelSmall)
+                    }
                 }
             }
         }
