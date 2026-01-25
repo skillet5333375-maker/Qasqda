@@ -1,9 +1,12 @@
+// File: app/src/main/java/com/example/medalgorithms/ui/Routes.kt
 package com.example.medalgorithms.ui
 
-object Routes {
-    const val HOME = "home"
-    const val ALGORITHMS = "algorithms"
-    const val CATEGORIES = "categories"
-    const val TEMPLATES_LIST = "templates_list"
-    const val TEMPLATE_EDIT = "template_edit"
+/**
+ * Все маршруты приложения держим тут.
+ * Если у тебя уже есть другие экраны — добавляй сюда новые routes.
+ */
+sealed class Routes(val route: String) {
+    data object Home : Routes("home")
+    data object Algorithms : Routes("algorithms")
 }
+
