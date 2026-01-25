@@ -1,4 +1,4 @@
-- name: Who pulls com.android.support
+# File: .github/workflows/android-debug-apk.yml- name: Who pulls com.android.support
   run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
 - name: Dependency insight (who pulls com.android.support)
   run: ./gradlew :app:dependencyInsight --dependency com.android.support --configuration debugRuntimeClasspath --no-daemon
