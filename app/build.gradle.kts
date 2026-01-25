@@ -80,4 +80,12 @@ kapt {
  */
 configurations.configureEach {
     exclude(group = "com.android.support")
+dependencies {
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+}
+
+configurations.configureEach {
+    exclude(group = "com.android.support")
+}
+
 }
